@@ -1,0 +1,439 @@
+yanni@Belshazar:~$ adb start-server
+yanni@Belshazar:~$ adb devices
+List of devices attached
+0202640c3ceab9ed	no permissions (verify udev rules); see [http://developer.android.com/tools/device.html]
+
+yanni@Belshazar:~$ sudo -s
+[sudo] password for yanni:          
+root@Belshazar:~# sudo ./adb start-server
+sudo: ./adb: command not found
+root@Belshazar:~# lsub
+
+Command 'lsub' not found, did you mean:
+
+  command 'lsusb' from deb usbutils
+  command 'qsub' from deb gridengine-client
+  command 'qsub' from deb slurm-wlm-torque
+
+Try: apt install <deb name>
+
+root@Belshazar:~# 1sub
+
+Command '1sub' not found, did you mean:
+
+  command 'qsub' from deb gridengine-client
+  command 'qsub' from deb slurm-wlm-torque
+
+Try: apt install <deb name>
+
+root@Belshazar:~# ./adb devices
+bash: ./adb: No such file or directory
+root@Belshazar:~# adb devices
+List of devices attached
+0202640c3ceab9ed	no permissions (verify udev rules); see [http://developer.android.com/tools/device.html]
+
+root@Belshazar:~# adb kill server
+Android Debug Bridge version 1.0.36
+Revision 1:7.0.0+r33-2
+
+ -a                            - directs adb to listen on all interfaces for a connection
+ -d                            - directs command to the only connected USB device
+                                 returns an error if more than one USB device is present.
+ -e                            - directs command to the only running emulator.
+                                 returns an error if more than one emulator is running.
+ -s <specific device>          - directs command to the device or emulator with the given
+                                 serial number or qualifier. Overrides ANDROID_SERIAL
+                                 environment variable.
+ -p <product name or path>     - simple product name like 'sooner', or
+                                 a relative/absolute path to a product
+                                 out directory like 'out/target/product/sooner'.
+                                 If -p is not specified, the ANDROID_PRODUCT_OUT
+                                 environment variable is used, which must
+                                 be an absolute path.
+ -H                            - Name of adb server host (default: localhost)
+ -P                            - Port of adb server (default: 5037)
+ devices [-l]                  - list all connected devices
+                                 ('-l' will also list device qualifiers)
+ connect <host>[:<port>]       - connect to a device via TCP/IP
+                                 Port 5555 is used by default if no port number is specified.
+ disconnect [<host>[:<port>]]  - disconnect from a TCP/IP device.
+                                 Port 5555 is used by default if no port number is specified.
+                                 Using this command with no additional arguments
+                                 will disconnect from all connected TCP/IP devices.
+
+device commands:
+  adb push <local>... <remote>
+                               - copy files/dirs to device
+  adb pull [-a] <remote>... <local>
+                               - copy files/dirs from device
+                                 (-a preserves file timestamp and mode)
+  adb sync [ <directory> ]     - copy host->device only if changed
+                                 (-l means list but don't copy)
+  adb shell [-e escape] [-n] [-Tt] [-x] [command]
+                               - run remote shell command (interactive shell if no command given)
+                                 (-e: choose escape character, or "none"; default '~')
+                                 (-n: don't read from stdin)
+                                 (-T: disable PTY allocation)
+                                 (-t: force PTY allocation)
+                                 (-x: disable remote exit codes and stdout/stderr separation)
+  adb emu <command>            - run emulator console command
+  adb logcat [ <filter-spec> ] - View device log
+  adb forward --list           - list all forward socket connections.
+                                 the format is a list of lines with the following format:
+                                    <serial> " " <local> " " <remote> "\n"
+  adb forward <local> <remote> - forward socket connections
+                                 forward specs are one of: 
+                                   tcp:<port>
+                                   localabstract:<unix domain socket name>
+                                   localreserved:<unix domain socket name>
+                                   localfilesystem:<unix domain socket name>
+                                   dev:<character device name>
+                                   jdwp:<process pid> (remote only)
+  adb forward --no-rebind <local> <remote>
+                               - same as 'adb forward <local> <remote>' but fails
+                                 if <local> is already forwarded
+  adb forward --remove <local> - remove a specific forward socket connection
+  adb forward --remove-all     - remove all forward socket connections
+  adb reverse --list           - list all reverse socket connections from device
+  adb reverse <remote> <local> - reverse socket connections
+                                 reverse specs are one of:
+                                   tcp:<port>
+                                   localabstract:<unix domain socket name>
+                                   localreserved:<unix domain socket name>
+                                   localfilesystem:<unix domain socket name>
+  adb reverse --no-rebind <remote> <local>
+                               - same as 'adb reverse <remote> <local>' but fails
+                                 if <remote> is already reversed.
+  adb reverse --remove <remote>
+                               - remove a specific reversed socket connection
+  adb reverse --remove-all     - remove all reversed socket connections from device
+  adb jdwp                     - list PIDs of processes hosting a JDWP transport
+  adb install [-lrtsdg] <file>
+                               - push this package file to the device and install it
+                                 (-l: forward lock application)
+                                 (-r: replace existing application)
+                                 (-t: allow test packages)
+                                 (-s: install application on sdcard)
+                                 (-d: allow version code downgrade (debuggable packages only))
+                                 (-g: grant all runtime permissions)
+  adb install-multiple [-lrtsdpg] <file...>
+                               - push this package file to the device and install it
+                                 (-l: forward lock application)
+                                 (-r: replace existing application)
+                                 (-t: allow test packages)
+                                 (-s: install application on sdcard)
+                                 (-d: allow version code downgrade (debuggable packages only))
+                                 (-p: partial application install)
+                                 (-g: grant all runtime permissions)
+  adb uninstall [-k] <package> - remove this app package from the device
+                                 ('-k' means keep the data and cache directories)
+  adb bugreport [<zip_file>]   - return all information from the device
+                                 that should be included in a bug report.
+
+  adb backup [-f <file>] [-apk|-noapk] [-obb|-noobb] [-shared|-noshared] [-all] [-system|-nosystem] [<packages...>]
+                               - write an archive of the device's data to <file>.
+                                 If no -f option is supplied then the data is written
+                                 to "backup.ab" in the current directory.
+                                 (-apk|-noapk enable/disable backup of the .apks themselves
+                                    in the archive; the default is noapk.)
+                                 (-obb|-noobb enable/disable backup of any installed apk expansion
+                                    (aka .obb) files associated with each application; the default
+                                    is noobb.)
+                                 (-shared|-noshared enable/disable backup of the device's
+                                    shared storage / SD card contents; the default is noshared.)
+                                 (-all means to back up all installed applications)
+                                 (-system|-nosystem toggles whether -all automatically includes
+                                    system applications; the default is to include system apps)
+                                 (<packages...> is the list of applications to be backed up.  If
+                                    the -all or -shared flags are passed, then the package
+                                    list is optional.  Applications explicitly given on the
+                                    command line will be included even if -nosystem would
+                                    ordinarily cause them to be omitted.)
+
+  adb restore <file>           - restore device contents from the <file> backup archive
+
+  adb disable-verity           - disable dm-verity checking on USERDEBUG builds
+  adb enable-verity            - re-enable dm-verity checking on USERDEBUG builds
+  adb keygen <file>            - generate adb public/private key. The private key is stored in <file>,
+                                 and the public key is stored in <file>.pub. Any existing files
+                                 are overwritten.
+  adb help                     - show this help message
+  adb version                  - show version num
+
+scripting:
+  adb wait-for[-<transport>]-<state>
+                               - wait for device to be in the given state:
+                                 device, recovery, sideload, or bootloader
+                                 Transport is: usb, local or any [default=any]
+  adb start-server             - ensure that there is a server running
+  adb kill-server              - kill the server if it is running
+  adb get-state                - prints: offline | bootloader | device
+  adb get-serialno             - prints: <serial-number>
+  adb get-devpath              - prints: <device-path>
+  adb remount                  - remounts the /system, /vendor (if present) and /oem (if present) partitions on the device read-write
+  adb reboot [bootloader|recovery]
+                               - reboots the device, optionally into the bootloader or recovery program.
+  adb reboot sideload          - reboots the device into the sideload mode in recovery program (adb root required).
+  adb reboot sideload-auto-reboot
+                               - reboots into the sideload mode, then reboots automatically after the sideload regardless of the result.
+  adb sideload <file>          - sideloads the given package
+  adb root                     - restarts the adbd daemon with root permissions
+  adb unroot                   - restarts the adbd daemon without root permissions
+  adb usb                      - restarts the adbd daemon listening on USB
+  adb tcpip <port>             - restarts the adbd daemon listening on TCP on the specified port
+
+networking:
+  adb ppp <tty> [parameters]   - Run PPP over USB.
+ Note: you should not automatically start a PPP connection.
+ <tty> refers to the tty for PPP stream. Eg. dev:/dev/omap_csmi_tty1
+ [parameters] - Eg. defaultroute debug dump local notty usepeerdns
+
+adb sync notes: adb sync [ <directory> ]
+  <localdir> can be interpreted in several ways:
+
+  - If <directory> is not specified, /system, /vendor (if present), /oem (if present) and /data partitions will be updated.
+
+  - If it is "system", "vendor", "oem" or "data", only the corresponding partition
+    is updated.
+
+internal debugging:
+  adb reconnect                  Kick current connection from host side and make it reconnect.
+  adb reconnect device           Kick current connection from device side and make it reconnect.
+environment variables:
+  ADB_TRACE                    - Print debug information. A comma separated list of the following values
+                                 1 or all, adb, sockets, packets, rwx, usb, sync, sysdeps, transport, jdwp
+  ANDROID_SERIAL               - The serial number to connect to. -s takes priority over this if given.
+  ANDROID_LOG_TAGS             - When used with the logcat option, only these debug tags are printed.
+root@Belshazar:~# adb kill-server
+root@Belshazar:~# adb start-server
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+root@Belshazar:~# adb devices
+List of devices attached
+0202640c3ceab9ed	device
+
+root@Belshazar:~# adb reboot bootloader
+root@Belshazar:~# fastboot devices
+0202640c3ceab9ed	fastboot
+root@Belshazar:~# fastboot oem unlock
+...
+FAILED (remote: Already unlocked)
+finished. total time: 0.010s
+root@Belshazar:~# fastboot format cache
+Creating filesystem with parameters:
+    Size: 100663296
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 6144
+    Inode size: 256
+    Journal blocks: 1024
+    Label: 
+    Blocks: 24576
+    Block groups: 1
+    Reserved block group size: 7
+Created filesystem with 11/6144 inodes and 1422/24576 blocks
+target reported max download size of 536870912 bytes
+erasing 'cache'...
+OKAY [  0.063s]
+sending 'cache' (5688 KB)...
+OKAY [  0.247s]
+writing 'cache'...
+OKAY [  0.071s]
+finished. total time: 0.381s
+root@Belshazar:~# fastboot format userdata
+Creating filesystem with parameters:
+    Size: 27283927040
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8176
+    Inode size: 256
+    Journal blocks: 32768
+    Label: 
+    Blocks: 6661115
+    Block groups: 204
+    Reserved block group size: 1024
+Created filesystem with 11/1667904 inodes and 148720/6661115 blocks
+target reported max download size of 536870912 bytes
+erasing 'userdata'...
+OKAY [  0.954s]
+sending 'userdata' (138993 KB)...
+OKAY [  4.245s]
+writing 'userdata'...
+OKAY [  1.578s]
+finished. total time: 6.777s
+root@Belshazar:~# git clone https://github.com/plasma-phone-packaging/pm-flashtool.git
+fatal: destination path 'pm-flashtool' already exists and is not an empty directory.
+root@Belshazar:~# cd pm-flashtool
+root@Belshazar:~/pm-flashtool# ./pm-flash -p edge
++ CACHEDIR=cache
++ echo 'Waiting for device to be in the fastboot mode'
+Waiting for device to be in the fastboot mode
++ fastboot getvar product
+product: bullhead
+finished. total time: 0.007s
+++ fastboot getvar product
+++ awk '-F: ' '{print $2}'
+++ head -1
++ DEVICE_NAME=bullhead
++ confirm 'Connected device is bullhead, is that correct? [y/N]'
++ read -r -p 'Connected device is bullhead, is that correct? [y/N] ' response
+Connected device is bullhead, is that correct? [y/N] y
++ case $response in
++ true
++ PLATFORM=neon
++ echo 'Continuing ...'
+Continuing ...
++ getopts cp: opt
++ case $opt in
++ PLATFORM=edge
++ getopts cp: opt
++ '[' -z '' ']'
++ download bullhead edge
++ '[' 2 -eq 0 ']'
++ mkdir -p cache/
++ pushd cache/
+~/pm-flashtool/cache ~/pm-flashtool
++ echo 'Downloading latest rootfs ... '
+Downloading latest rootfs ... 
++ '[' edge == neon ']'
++ '[' edge == arch ']'
++ '[' edge == edge ']'
+++ curl https://images.plasma-mobile.org/edge_rootfs_stamp
++ ROOTFS_VERSION=20190306-144714
++ wget -c https://images.plasma-mobile.org/edge-rootfs/pm-rootfs-20190306-144714.tar.gz -P rootfs
+--2019-03-14 09:41:44--  https://images.plasma-mobile.org/edge-rootfs/pm-rootfs-20190306-144714.tar.gz
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 558504011 (533M) [application/x-gzip]
+Saving to: 'rootfs/pm-rootfs-20190306-144714.tar.gz’
+
+pm-rootfs-20190306- 100%[===================>] 532.63M  3.50MB/s    in 2m 28s  
+
+2019-03-14 09:44:14 (3.59 MB/s) - 'rootfs/pm-rootfs-20190306-144714.tar.gz’ saved [558504011/558504011]
+
++ ln -sf rootfs/pm-rootfs-20190306-144714.tar.gz pm-rootfs-latest.tar.gz
++ echo '[done]'
+[done]
++ echo 'Downloading the latest boot, recovery, and system images  ... '
+Downloading the latest boot, recovery, and system images  ... 
+++ curl https://images.plasma-mobile.org/halium/bullhead/halium_stamp
++ HALIUM_VERSION=20180209-134208
++ wget -c https://images.plasma-mobile.org/halium/bullhead/recovery.img -P bullhead
+--2019-03-14 09:44:15--  https://images.plasma-mobile.org/halium/bullhead/recovery.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ wget -c https://images.plasma-mobile.org/halium/bullhead/20180209-134208/system.img -P bullhead/20180209-134208
+--2019-03-14 09:44:16--  https://images.plasma-mobile.org/halium/bullhead/20180209-134208/system.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ wget -c https://images.plasma-mobile.org/halium/bullhead/20180209-134208/boot.img -P bullhead/20180209-134208
+--2019-03-14 09:44:18--  https://images.plasma-mobile.org/halium/bullhead/20180209-134208/boot.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ rm -f bullhead/latest
++ ln -sf 20180209-134208 bullhead/latest
++ echo '[done]'
+[done]
++ popd
+~/pm-flashtool
++ flash-phone bullhead
++ '[' 1 -eq 0 ']'
++ echo -n 'Flashing recovery image ... '
+Flashing recovery image ... + fastboot flash recovery cache/bullhead/recovery.img
++ echo -n '[done]'
+[done]+ fastboot boot cache/bullhead/recovery.img
+downloading 'boot.img'...
+OKAY [  0.583s]
+booting...
+OKAY [  0.550s]
+finished. total time: 1.133s
++ wait_for_device
+++ adb shell echo 1
++ test -z ''
++ echo -n .
+.+ sleep 3
+++ adb shell echo 1
++ test -z ''
++ echo -n .
+.+ sleep 3
+++ adb shell echo 1
++ test -z $'1\r'
++ echo
+
+++ readlink -f cache/pm-rootfs-latest.tar.gz
++ ./rootstock-touch-install /home/yanni/pm-flashtool/cache/rootfs/pm-rootfs-20190306-144714.tar.gz cache/bullhead/latest/system.img cache/bullhead/latest/boot.img
+mount: mounting /dev/block/mmcblk0p40 on /cache failed: Device or resource busy
+mount: mounting /dev/block/mmcblk0p45 on /data failed: Device or resource busy
+transfering rootfs tarball ... [done]
+preparing system-image on device ... [done]
+unpacking rootfs tarball to system-image ... [done]
+adding android system image to installation ... [done]
+Setting up default password for phablet user to 1234 ... [done]
+Cloning into 'fetch-demo-data'...
+remote: Counting objects: 12, done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 12 (delta 0), reused 3 (delta 0)
+Unpacking objects: 100% (12/12), done.
+--2019-03-14 09:47:38--  http://acbf.info/download?id=0016
+Resolving acbf.info (acbf.info)... 5.10.124.141
+Connecting to acbf.info (acbf.info)|5.10.124.141|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [application/zip]
+Saving to: 'OUTPUT/Documents/Pepper___Carrot___Vol__1.cbz’
+
+OUTPUT/Documents/Pe     [<=>                 ]  21.77M  3.78MB/s    in 8.9s    
+
+2019-03-14 09:47:50 (2.43 MB/s) - 'OUTPUT/Documents/Pepper___Carrot___Vol__1.cbz’ saved [22831062]
+
+--2019-03-14 09:47:50--  https://www.gnu.org/licenses/quick-guide-gplv3.pdf
+Resolving www.gnu.org (www.gnu.org)... 209.51.188.148, 2001:470:142:3::a
+Connecting to www.gnu.org (www.gnu.org)|209.51.188.148|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 104908 (102K) [application/pdf]
+Saving to: 'OUTPUT/Documents/quick-guide-gplv3.pdf’
+
+quick-guide-gplv3.p 100%[===================>] 102.45K   139KB/s    in 0.7s    
+
+2019-03-14 09:47:52 (139 KB/s) - 'OUTPUT/Documents/quick-guide-gplv3.pdf’ saved [104908/104908]
+
+~/pm-flashtool/OUTPUT ~/pm-flashtool
+./
+./Documents/
+./Documents/quick-guide-gplv3.pdf
+./Documents/Pepper___Carrot___Vol__1.cbz
+~/pm-flashtool
+./
+./Documents/
+./Documents/quick-guide-gplv3.pdf
+./Documents/Pepper___Carrot___Vol__1.cbz
+cleaning up on device ... [done]
+Increasing the rootfs size to 4G ... e2fsck 1.42.9 (28-Dec-2013)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+
+/data/rootfs.img: ***** FILE SYSTEM WAS MODIFIED *****
+/data/rootfs.img: 78878/128000 files (4.2% non-contiguous), 372863/512000 blocks
+resize2fs 1.42.9 (28-Dec-2013)
+Resizing the filesystem on /data/rootfs.img to 1024000 (4k) blocks.
+The filesystem on /data/rootfs.img is now 1024000 blocks long.
+
+[done]
+[100%] /data/time/timekeep
+[done]
+rebooting into bootloader mode and flashing boot.img ... 
