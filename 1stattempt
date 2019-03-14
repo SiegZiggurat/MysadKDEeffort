@@ -1,0 +1,286 @@
+yanni@Belshazar:~$ sudo -s
+[sudo] password for yanni:          
+root@Belshazar:~# adb start-server
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+root@Belshazar:~# adb devices
+List of devices attached
+0202640c3ceab9ed	device
+
+root@Belshazar:~# adb reboot bootloader
+root@Belshazar:~# fastboot devices
+0202640c3ceab9ed	fastboot
+root@Belshazar:~# fastboot oem unlock
+...
+FAILED (command write failed (Protocol error))
+finished. total time: 0.001s
+root@Belshazar:~# fastboot oem unlock
+...
+FAILED (status read failed (No such device))
+finished. total time: 5.004s
+root@Belshazar:~# fastboot format cache
+FAILED (command write failed (Protocol error))
+root@Belshazar:~# fastboot format cache
+Creating filesystem with parameters:
+    Size: 100663296
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 6144
+    Inode size: 256
+    Journal blocks: 1024
+    Label:
+    Blocks: 24576
+    Block groups: 1
+    Reserved block group size: 7
+Created filesystem with 11/6144 inodes and 1422/24576 blocks
+target reported max download size of 536870912 bytes
+erasing 'cache'...
+OKAY [  0.066s]
+sending 'cache' (5688 KB)...
+OKAY [  0.247s]
+writing 'cache'...
+OKAY [  0.082s]
+finished. total time: 0.395s
+root@Belshazar:~# fastboot format userdata
+Creating filesystem with parameters:
+    Size: 27283927040
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8176
+    Inode size: 256
+    Journal blocks: 32768
+    Label:
+    Blocks: 6661115
+    Block groups: 204
+    Reserved block group size: 1024
+Created filesystem with 11/1667904 inodes and 148720/6661115 blocks
+target reported max download size of 536870912 bytes
+erasing 'userdata'...
+OKAY [  0.419s]
+sending 'userdata' (138993 KB)...
+OKAY [  4.228s]
+writing 'userdata'...
+OKAY [  1.480s]
+finished. total time: 6.128s
+root@Belshazar:~# git clone https://github.com/plasma-phone-packaging/pm-flashtool.git
+
+Command 'git' not found, but can be installed with:
+
+apt install git
+
+root@Belshazar:~# apt install git clone https://github.com/plasma-phone-packaging/pm-flashtool.git
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+E: Unable to locate package clone
+E: Unable to locate package https://github.com/plasma-phone-packaging
+E: Couldn't find any package by glob 'https://github.com/plasma-phone-packaging'
+E: Couldn't find any package by regex 'https://github.com/plasma-phone-packaging'
+root@Belshazar:~# cd pm-flashtool
+bash: cd: pm-flashtool: No such file or directory
+root@Belshazar:~# cd pm-flashtool
+bash: cd: pm-flashtool: No such file or directory
+root@Belshazar:~# git clone
+
+Command 'git' not found, but can be installed with:
+
+apt install git
+
+root@Belshazar:~# git clone
+
+Command 'git' not found, but can be installed with:
+
+apt install git
+
+root@Belshazar:~# git clone https://github.com/plasma-phone-packaging/pm-flashtool.git
+
+Command 'git' not found, but can be installed with:
+
+apt install git
+
+root@Belshazar:~# cd pm-flashtool
+bash: cd: pm-flashtool: No such file or directory
+root@Belshazar:~# fastboot format cache
+Creating filesystem with parameters:
+    Size: 100663296
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 6144
+    Inode size: 256
+    Journal blocks: 1024
+    Label:
+    Blocks: 24576
+    Block groups: 1
+    Reserved block group size: 7
+Created filesystem with 11/6144 inodes and 1422/24576 blocks
+target reported max download size of 536870912 bytes
+erasing 'cache'...
+OKAY [  0.072s]
+sending 'cache' (5688 KB)...
+OKAY [  0.264s]
+writing 'cache'...
+OKAY [  0.081s]
+finished. total time: 0.417s
+root@Belshazar:~# fastboot format userdata
+Creating filesystem with parameters:
+    Size: 27283927040
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8176
+    Inode size: 256
+    Journal blocks: 32768
+    Label:
+    Blocks: 6661115
+    Block groups: 204
+    Reserved block group size: 1024
+Created filesystem with 11/1667904 inodes and 148720/6661115 blocks
+target reported max download size of 536870912 bytes
+erasing 'userdata'...
+OKAY [  0.648s]
+sending 'userdata' (138993 KB)...
+OKAY [  4.193s]
+writing 'userdata'...
+OKAY [  1.488s]
+finished. total time: 6.329s
+root@Belshazar:~# git clone https://github.com/plasma-phone-packaging/pm-flashtool.git
+
+Command 'git' not found, but can be installed with:
+
+apt install git
+
+root@Belshazar:~# ^C
+root@Belshazar:~# git clone https://github.com/plasma-phone-packaging/pm-flashtool.git
+Cloning into 'pm-flashtool'...
+remote: Enumerating objects: 7, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (7/7), done.
+remote: Total 204 (delta 2), reused 0 (delta 0), pack-reused 197
+Receiving objects: 100% (204/204), 35.53 KiB | 2.73 MiB/s, done.
+Resolving deltas: 100% (93/93), done.
+root@Belshazar:~# cd pm-flashtool
+root@Belshazar:~/pm-flashtool# ./pm flash
+bash: ./pm: No such file or directory
+root@Belshazar:~/pm-flashtool# ./pm-flash
++ CACHEDIR=cache
++ echo 'Waiting for device to be in the fastboot mode'
+Waiting for device to be in the fastboot mode
++ fastboot getvar product
+product: bullhead
+finished. total time: 0.002s
+++ fastboot getvar product
+++ awk '-F: ' '{print $2}'
+++ head -1
++ DEVICE_NAME=bullhead
++ confirm 'Connected device is bullhead, is that correct? [y/N]'
++ read -r -p 'Connected device is bullhead, is that correct? [y/N] ' response
+Connected device is bullhead, is that correct? [y/N] y
++ case $response in
++ true
++ PLATFORM=neon
++ echo 'Continuing ...'
+Continuing ...
++ getopts cp: opt
++ '[' -z '' ']'
++ download bullhead neon
++ '[' 2 -eq 0 ']'
++ mkdir -p cache/
++ pushd cache/
+~/pm-flashtool/cache ~/pm-flashtool
++ echo 'Downloading latest rootfs ... '
+Downloading latest rootfs ...
++ '[' neon == neon ']'
+++ curl https://images.plasma-mobile.org/rootfs_stamp
++ ROOTFS_VERSION=20190208-135835
++ wget -c https://images.plasma-mobile.org/rootfs/pm-rootfs-20190208-135835.tar.gz -P rootfs
+--2019-03-13 10:21:51--  https://images.plasma-mobile.org/rootfs/pm-rootfs-20190208-135835.tar.gz
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 560234962 (534M) [application/x-gzip]
+Saving to: 'rootfs/pm-rootfs-20190208-135835.tar.gz’
+
+pm-rootfs-20190208- 100%[===================>] 534.28M  2.33MB/s    in 3m 42s  
+
+2019-03-13 10:25:35 (2.40 MB/s) - 'rootfs/pm-rootfs-20190208-135835.tar.gz’ saved [560234962/560234962]
+
++ ln -sf rootfs/pm-rootfs-20190208-135835.tar.gz pm-rootfs-latest.tar.gz
++ '[' neon == arch ']'
++ '[' neon == edge ']'
++ echo '[done]'
+[done]
++ echo 'Downloading the latest boot, recovery, and system images  ... '
+Downloading the latest boot, recovery, and system images  ...
+++ curl https://images.plasma-mobile.org/halium/bullhead/halium_stamp
++ HALIUM_VERSION=20180209-134208
++ wget -c https://images.plasma-mobile.org/halium/bullhead/recovery.img -P bullhead
+--2019-03-13 10:25:38--  https://images.plasma-mobile.org/halium/bullhead/recovery.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 16827692 (16M)
+Saving to: 'bullhead/recovery.img’
+
+recovery.img        100%[===================>]  16.05M  3.28MB/s    in 6.5s    
+
+2019-03-13 10:25:45 (2.49 MB/s) - 'bullhead/recovery.img’ saved [16827692/16827692]
+
++ wget -c https://images.plasma-mobile.org/halium/bullhead/20180209-134208/system.img -P bullhead/20180209-134208
+--2019-03-13 10:25:45--  https://images.plasma-mobile.org/halium/bullhead/20180209-134208/system.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 195715072 (187M)
+Saving to: 'bullhead/20180209-134208/system.img’
+
+system.img          100%[===================>] 186.65M  2.29MB/s    in 66s     
+
+2019-03-13 10:26:52 (2.85 MB/s) - 'bullhead/20180209-134208/system.img’ saved [195715072/195715072]
+
++ wget -c https://images.plasma-mobile.org/halium/bullhead/20180209-134208/boot.img -P bullhead/20180209-134208
+--2019-03-13 10:26:52--  https://images.plasma-mobile.org/halium/bullhead/20180209-134208/boot.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 11956224 (11M)
+Saving to: 'bullhead/20180209-134208/boot.img’
+
+boot.img            100%[===================>]  11.40M  2.24MB/s    in 5.1s    
+
+2019-03-13 10:26:59 (2.24 MB/s) - 'bullhead/20180209-134208/boot.img’ saved [11956224/11956224]
+
++ rm -f bullhead/latest
++ ln -sf 20180209-134208 bullhead/latest
++ echo '[done]'
+[done]
++ popd
+~/pm-flashtool
++ flash-phone bullhead
++ '[' 1 -eq 0 ']'
++ echo -n 'Flashing recovery image ... '
+Flashing recovery image ... + fastboot flash recovery cache/bullhead/recovery.img
++ echo -n '[done]'
+[done]+ fastboot boot cache/bullhead/recovery.img
+downloading 'boot.img'...
+OKAY [  0.550s]
+booting...
+OKAY [  0.552s]
+finished. total time: 1.103s
++ wait_for_device
+++ adb shell echo 1
++ test -z ''
++ echo -n .
+.+ sleep 3
+++ adb shell echo 1
++ test -z ''
++ echo -n .
+.+ sleep 3
+++ adb shell echo 1
++ test -z $'1\r'
++ echo
+
+++ readlink -f cache/pm-rootfs-latest.tar.gz
++ ./rootstock-touch-install /home/yanni/pm-flashtool/cache/rootfs/pm-rootfs-20190208-135835.tar.gz cache/bullhead/latest/system.img cache/bullhead/latest/boot.img
+mount: mounting /dev/block/mmcblk0p40 on /cache failed: Device or resource busy
+mount: mounting /dev/block/mmcblk0p45 on /data failed: Device or resource busy
+transfering rootfs tarball ... error: no devices/emulators found
+root@Belshazar:~/pm-flashtool#
