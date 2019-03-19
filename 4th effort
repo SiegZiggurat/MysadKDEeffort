@@ -1,0 +1,50 @@
+yanni@Belshazar:~$ adb devices
+List of devices attached
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+0202640c3ceab9ed	recovery
+
+yanni@Belshazar:~$ adb sideload /home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip
+loading: '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+error: closed
+yanni@Belshazar:~$ adb sideload /home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip
+loading: '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+error: closed
+yanni@Belshazar:~$ adb sideload /home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip
+loading: '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+error: insufficient permissions for device: verify udev rules.
+See [http://developer.android.com/tools/device.html] for more information.
+yanni@Belshazar:~$ sudo -s
+[sudo] password for yanni:          
+root@Belshazar:~# adb sideload /home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip
+loading: '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+error: insufficient permissions for device: verify udev rules.
+See [http://developer.android.com/tools/device.html] for more information.
+root@Belshazar:~# adb sideload </home/yanni/bullhead-ota-opm7.181205.001-blaf2457.zip>
+bash: syntax error near unexpected token `newline'
+root@Belshazar:~# ^C
+root@Belshazar:~# adb sideload /home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip
+loading: '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+error: insufficient permissions for device: verify udev rules.
+See [http://developer.android.com/tools/device.html] for more information.
+root@Belshazar:~# adb start-server
+root@Belshazar:~# adb kill-server
+root@Belshazar:~# adb start-server
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+root@Belshazar:~# adb sideload '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+loading: '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+error: closed
+root@Belshazar:~# ^C
+root@Belshazar:~# adb sideload '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+Total xfer: 0.01x                                                               
+root@Belshazar:~# adb sideload '/home/yanni/bullhead-ota-opm7.181205.001-b1af2457.zip'
+Total xfer: 0.01x                                                               
+root@Belshazar:~# adb sideload '/home/yanni/Documents/Android recov/bullhead-opm7.181205.001/image-bullhead-opm7.181205.001.zip'
+loading: '/home/yanni/Documents/Android recov/bullhead-opm7.181205.001/image-bulserving: '/home/yanni/Documents/Android recov/bullhead-opm7.181205.001/image-bulTotal xfer: 0.00x                                                                                                         
+root@Belshazar:~# adb sideload '/home/yanni/Documents/Android recov/bullhead-ota-opm7.181205.001-b1af2457.zip'
+loading: '/home/yanni/Documents/Android recov/bullhead-ota-opm7.181205.001-b1af2serving: '/home/yanni/Documents/Android recov/bullhead-ota-opm7.181205.001-b1af2Total xfer: 0.01x                                                                                       
+root@Belshazar:~# fastboot format cache
+< waiting for any device >
+fastboot devices
+
