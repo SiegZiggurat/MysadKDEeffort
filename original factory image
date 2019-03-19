@@ -1,0 +1,861 @@
+                                 Port 5555 is used by default if no port number is specified.
+                                 Using this command with no additional arguments
+                                 will disconnect from all connected TCP/IP devices.
+
+device commands:
+  adb push <local>... <remote>
+                               - copy files/dirs to device
+  adb pull [-a] <remote>... <local>
+                               - copy files/dirs from device
+                                 (-a preserves file timestamp and mode)
+  adb sync [ <directory> ]     - copy host->device only if changed
+                                 (-l means list but don't copy)
+  adb shell [-e escape] [-n] [-Tt] [-x] [command]
+                               - run remote shell command (interactive shell if no command given)
+                                 (-e: choose escape character, or "none"; default '~')
+                                 (-n: don't read from stdin)
+                                 (-T: disable PTY allocation)
+                                 (-t: force PTY allocation)
+                                 (-x: disable remote exit codes and stdout/stderr separation)
+  adb emu <command>            - run emulator console command
+  adb logcat [ <filter-spec> ] - View device log
+  adb forward --list           - list all forward socket connections.
+                                 the format is a list of lines with the following format:
+                                    <serial> " " <local> " " <remote> "\n"
+  adb forward <local> <remote> - forward socket connections
+                                 forward specs are one of: 
+                                   tcp:<port>
+                                   localabstract:<unix domain socket name>
+                                   localreserved:<unix domain socket name>
+                                   localfilesystem:<unix domain socket name>
+                                   dev:<character device name>
+                                   jdwp:<process pid> (remote only)
+  adb forward --no-rebind <local> <remote>
+                               - same as 'adb forward <local> <remote>' but fails
+                                 if <local> is already forwarded
+  adb forward --remove <local> - remove a specific forward socket connection
+  adb forward --remove-all     - remove all forward socket connections
+  adb reverse --list           - list all reverse socket connections from device
+  adb reverse <remote> <local> - reverse socket connections
+                                 reverse specs are one of:
+                                   tcp:<port>
+                                   localabstract:<unix domain socket name>
+                                   localreserved:<unix domain socket name>
+                                   localfilesystem:<unix domain socket name>
+  adb reverse --no-rebind <remote> <local>
+                               - same as 'adb reverse <remote> <local>' but fails
+                                 if <remote> is already reversed.
+  adb reverse --remove <remote>
+                               - remove a specific reversed socket connection
+  adb reverse --remove-all     - remove all reversed socket connections from device
+  adb jdwp                     - list PIDs of processes hosting a JDWP transport
+  adb install [-lrtsdg] <file>
+                               - push this package file to the device and install it
+                                 (-l: forward lock application)
+                                 (-r: replace existing application)
+                                 (-t: allow test packages)
+                                 (-s: install application on sdcard)
+                                 (-d: allow version code downgrade (debuggable packages only))
+                                 (-g: grant all runtime permissions)
+  adb install-multiple [-lrtsdpg] <file...>
+                               - push this package file to the device and install it
+                                 (-l: forward lock application)
+                                 (-r: replace existing application)
+                                 (-t: allow test packages)
+                                 (-s: install application on sdcard)
+                                 (-d: allow version code downgrade (debuggable packages only))
+                                 (-p: partial application install)
+                                 (-g: grant all runtime permissions)
+  adb uninstall [-k] <package> - remove this app package from the device
+                                 ('-k' means keep the data and cache directories)
+  adb bugreport [<zip_file>]   - return all information from the device
+                                 that should be included in a bug report.
+
+  adb backup [-f <file>] [-apk|-noapk] [-obb|-noobb] [-shared|-noshared] [-all] [-system|-nosystem] [<packages...>]
+                               - write an archive of the device's data to <file>.
+                                 If no -f option is supplied then the data is written
+                                 to "backup.ab" in the current directory.
+                                 (-apk|-noapk enable/disable backup of the .apks themselves
+                                    in the archive; the default is noapk.)
+                                 (-obb|-noobb enable/disable backup of any installed apk expansion
+                                    (aka .obb) files associated with each application; the default
+                                    is noobb.)
+                                 (-shared|-noshared enable/disable backup of the device's
+                                    shared storage / SD card contents; the default is noshared.)
+                                 (-all means to back up all installed applications)
+                                 (-system|-nosystem toggles whether -all automatically includes
+                                    system applications; the default is to include system apps)
+                                 (<packages...> is the list of applications to be backed up.  If
+                                    the -all or -shared flags are passed, then the package
+                                    list is optional.  Applications explicitly given on the
+                                    command line will be included even if -nosystem would
+                                    ordinarily cause them to be omitted.)
+
+  adb restore <file>           - restore device contents from the <file> backup archive
+
+  adb disable-verity           - disable dm-verity checking on USERDEBUG builds
+  adb enable-verity            - re-enable dm-verity checking on USERDEBUG builds
+  adb keygen <file>            - generate adb public/private key. The private key is stored in <file>,
+                                 and the public key is stored in <file>.pub. Any existing files
+                                 are overwritten.
+  adb help                     - show this help message
+  adb version                  - show version num
+
+scripting:
+  adb wait-for[-<transport>]-<state>
+                               - wait for device to be in the given state:
+                                 device, recovery, sideload, or bootloader
+                                 Transport is: usb, local or any [default=any]
+  adb start-server             - ensure that there is a server running
+  adb kill-server              - kill the server if it is running
+  adb get-state                - prints: offline | bootloader | device
+  adb get-serialno             - prints: <serial-number>
+  adb get-devpath              - prints: <device-path>
+  adb remount                  - remounts the /system, /vendor (if present) and /oem (if present) partitions on the device read-write
+  adb reboot [bootloader|recovery]
+                               - reboots the device, optionally into the bootloader or recovery program.
+  adb reboot sideload          - reboots the device into the sideload mode in recovery program (adb root required).
+  adb reboot sideload-auto-reboot
+                               - reboots into the sideload mode, then reboots automatically after the sideload regardless of the result.
+  adb sideload <file>          - sideloads the given package
+  adb root                     - restarts the adbd daemon with root permissions
+  adb unroot                   - restarts the adbd daemon without root permissions
+  adb usb                      - restarts the adbd daemon listening on USB
+  adb tcpip <port>             - restarts the adbd daemon listening on TCP on the specified port
+
+networking:
+  adb ppp <tty> [parameters]   - Run PPP over USB.
+ Note: you should not automatically start a PPP connection.
+ <tty> refers to the tty for PPP stream. Eg. dev:/dev/omap_csmi_tty1
+ [parameters] - Eg. defaultroute debug dump local notty usepeerdns
+
+adb sync notes: adb sync [ <directory> ]
+  <localdir> can be interpreted in several ways:
+
+  - If <directory> is not specified, /system, /vendor (if present), /oem (if present) and /data partitions will be updated.
+
+  - If it is "system", "vendor", "oem" or "data", only the corresponding partition
+    is updated.
+
+internal debugging:
+  adb reconnect                  Kick current connection from host side and make it reconnect.
+  adb reconnect device           Kick current connection from device side and make it reconnect.
+environment variables:
+  ADB_TRACE                    - Print debug information. A comma separated list of the following values
+                                 1 or all, adb, sockets, packets, rwx, usb, sync, sysdeps, transport, jdwp
+  ANDROID_SERIAL               - The serial number to connect to. -s takes priority over this if given.
+  ANDROID_LOG_TAGS             - When used with the logcat option, only these debug tags are printed.
+root@Belshazar:~# adb devices
+List of devices attached
+
+root@Belshazar:~# adb reboot bootloader
+error: no devices/emulators found
+root@Belshazar:~# adb devices
+List of devices attached
+
+root@Belshazar:~# cd '/home/yanni/Desktop/bullhead-opm7.181205.001'
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# flash-all
+flash-all: command not found
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# fastboot flash-all
+usage: fastboot [ <option> ] <command>
+
+commands:
+  update <filename>                        Reflash device from update.zip.
+  flashall                                 Flash boot, system, vendor, and --
+                                           if found -- recovery.
+  flash <partition> [ <filename> ]         Write a file to a flash partition.
+  flashing lock                            Locks the device. Prevents flashing.
+  flashing unlock                          Unlocks the device. Allows flashing
+                                           any partition except
+                                           bootloader-related partitions.
+  flashing lock_critical                   Prevents flashing bootloader-related
+                                           partitions.
+  flashing unlock_critical                 Enables flashing bootloader-related
+                                           partitions.
+  flashing get_unlock_ability              Queries bootloader to see if the
+                                           device is unlocked.
+  flashing get_unlock_bootloader_nonce     Queries the bootloader to get the
+                                           unlock nonce.
+  flashing unlock_bootloader <request>     Issue unlock bootloader using request.
+  flashing lock_bootloader                 Locks the bootloader to prevent
+                                           bootloader version rollback.
+  erase <partition>                        Erase a flash partition.
+  format[:[<fs type>][:[<size>]] <partition>
+                                           Format a flash partition. Can
+                                           override the fs type and/or size
+                                           the bootloader reports.
+  getvar <variable>                        Display a bootloader variable.
+  set_active <suffix>                      Sets the active slot. If slots are
+                                           not supported, this does nothing.
+  boot <kernel> [ <ramdisk> [ <second> ] ] Download and boot kernel.
+  flash:raw boot <kernel> [ <ramdisk> [ <second> ] ]
+                                           Create bootimage and flash it.
+  devices [-l]                             List all connected devices [with
+                                           device paths].
+  continue                                 Continue with autoboot.
+  reboot [bootloader]                      Reboot device [into bootloader].
+  reboot-bootloader                        Reboot device into bootloader.
+  help                                     Show this help message.
+
+options:
+  -w                                       Erase userdata and cache (and format
+                                           if supported by partition type).
+  -u                                       Do not erase partition before
+                                           formatting.
+  -s <specific device>                     Specify a device. For USB, provide either
+                                           a serial number or path to device port.
+                                           For ethernet, provide an address in the                                           form <protocol>:<hostname>[:port] where                                           <protocol> is either tcp or udp.
+  -p <product>                             Specify product name.
+  -c <cmdline>                             Override kernel commandline.
+  -i <vendor id>                           Specify a custom USB vendor id.
+  -b, --base <base_addr>                   Specify a custom kernel base
+                                           address (default: 0x10000000).
+  --kernel-offset                          Specify a custom kernel offset.
+                                           (default: 0x00008000)
+  --ramdisk-offset                         Specify a custom ramdisk offset.
+                                           (default: 0x01000000)
+  --tags-offset                            Specify a custom tags offset.
+                                           (default: 0x00000100)
+  -n, --page-size <page size>              Specify the nand page size
+                                           (default: 2048).
+  -S <size>[K|M|G]                         Automatically sparse files greater
+                                           than 'size'. 0 to disable.
+  --slot <suffix>                          Specify slot suffix to be used if the
+                                           device supports slots. This will be
+                                           added to all partition names that use
+                                           slots. 'all' can be given to refer
+                                           to all slots. 'other' can be given to
+                                           refer to a non-current slot. If this
+                                           flag is not used, slotted partitions
+                                           will default to the current active slot.
+  -a, --set-active[=<suffix>]              Sets the active slot. If no suffix is
+                                           provided, this will default to the value
+                                           given by --slot. If slots are not
+                                           supported, this does nothing. This will
+                                           run after all non-reboot commands.
+  --wipe-and-use-fbe                       On devices which support it,
+                                           erase userdata and cache, and
+                                           enable file-based encryption
+  --unbuffered                             Do not buffer input or output.
+  --version                                Display version.
+  -h, --help                               show this message.
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# fastboot flashall
+error: neither -p product specified nor ANDROID_PRODUCT_OUT set
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# fastboot -p flash-all
+usage: fastboot [ <option> ] <command>
+
+commands:
+  update <filename>                        Reflash device from update.zip.
+  flashall                                 Flash boot, system, vendor, and --
+                                           if found -- recovery.
+  flash <partition> [ <filename> ]         Write a file to a flash partition.
+  flashing lock                            Locks the device. Prevents flashing.
+  flashing unlock                          Unlocks the device. Allows flashing
+                                           any partition except
+                                           bootloader-related partitions.
+  flashing lock_critical                   Prevents flashing bootloader-related
+                                           partitions.
+  flashing unlock_critical                 Enables flashing bootloader-related
+                                           partitions.
+  flashing get_unlock_ability              Queries bootloader to see if the
+                                           device is unlocked.
+  flashing get_unlock_bootloader_nonce     Queries the bootloader to get the
+                                           unlock nonce.
+  flashing unlock_bootloader <request>     Issue unlock bootloader using request.
+  flashing lock_bootloader                 Locks the bootloader to prevent
+                                           bootloader version rollback.
+  erase <partition>                        Erase a flash partition.
+  format[:[<fs type>][:[<size>]] <partition>
+                                           Format a flash partition. Can
+                                           override the fs type and/or size
+                                           the bootloader reports.
+  getvar <variable>                        Display a bootloader variable.
+  set_active <suffix>                      Sets the active slot. If slots are
+                                           not supported, this does nothing.
+  boot <kernel> [ <ramdisk> [ <second> ] ] Download and boot kernel.
+  flash:raw boot <kernel> [ <ramdisk> [ <second> ] ]
+                                           Create bootimage and flash it.
+  devices [-l]                             List all connected devices [with
+                                           device paths].
+  continue                                 Continue with autoboot.
+  reboot [bootloader]                      Reboot device [into bootloader].
+  reboot-bootloader                        Reboot device into bootloader.
+  help                                     Show this help message.
+
+options:
+  -w                                       Erase userdata and cache (and format
+                                           if supported by partition type).
+  -u                                       Do not erase partition before
+                                           formatting.
+  -s <specific device>                     Specify a device. For USB, provide either
+                                           a serial number or path to device port.
+                                           For ethernet, provide an address in the                                           form <protocol>:<hostname>[:port] where                                           <protocol> is either tcp or udp.
+  -p <product>                             Specify product name.
+  -c <cmdline>                             Override kernel commandline.
+  -i <vendor id>                           Specify a custom USB vendor id.
+  -b, --base <base_addr>                   Specify a custom kernel base
+                                           address (default: 0x10000000).
+  --kernel-offset                          Specify a custom kernel offset.
+                                           (default: 0x00008000)
+  --ramdisk-offset                         Specify a custom ramdisk offset.
+                                           (default: 0x01000000)
+  --tags-offset                            Specify a custom tags offset.
+                                           (default: 0x00000100)
+  -n, --page-size <page size>              Specify the nand page size
+                                           (default: 2048).
+  -S <size>[K|M|G]                         Automatically sparse files greater
+                                           than 'size'. 0 to disable.
+  --slot <suffix>                          Specify slot suffix to be used if the
+                                           device supports slots. This will be
+                                           added to all partition names that use
+                                           slots. 'all' can be given to refer
+                                           to all slots. 'other' can be given to
+                                           refer to a non-current slot. If this
+                                           flag is not used, slotted partitions
+                                           will default to the current active slot.
+  -a, --set-active[=<suffix>]              Sets the active slot. If no suffix is
+                                           provided, this will default to the value
+                                           given by --slot. If slots are not
+                                           supported, this does nothing. This will
+                                           run after all non-reboot commands.
+  --wipe-and-use-fbe                       On devices which support it,
+                                           erase userdata and cache, and
+                                           enable file-based encryption
+  --unbuffered                             Do not buffer input or output.
+  --version                                Display version.
+  -h, --help                               show this message.
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# bash flash-all.sh
+fastboot too old
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# cd
+root@Belshazar:~# update fastboot
+
+Command 'update' not found, did you mean:
+
+  command 'lupdate' from deb qtchooser
+  command 'zupdate' from deb zutils
+  command 'uupdate' from deb devscripts
+  command 'xupdate' from deb libxml-xupdate-libxml-perl
+  command 'pupdate' from deb pbuilder-scripts
+
+Try: apt install <deb name>
+
+root@Belshazar:~# apt upgrade fastboot
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+fastboot is already the newest version (1:7.0.0+r33-2).
+fastboot set to manually installed.
+Calculating upgrade... Done
+The following packages were automatically installed and are no longer required:
+  libbsd0:i386 libcompfaceg1 libdrm-amdgpu1:i386 libdrm-intel1:i386
+  libdrm-nouveau2:i386 libdrm-radeon1:i386 libdrm2:i386 libedit2:i386
+  libelf1:i386 libetpan20 libexpat1:i386 libffi6:i386 libgl1:i386
+  libgl1-mesa-dri:i386 libgl1-mesa-glx:i386 libglapi-mesa:i386 libglvnd0:i386
+  libglx-mesa0:i386 libglx0:i386 libllvm6.0:i386 libllvm7:i386 liblockfile-bin
+  liblockfile1 libpciaccess0:i386 libsensors4:i386 libstdc++6:i386
+  libx11-6:i386 libx11-xcb1:i386 libxau6:i386 libxcb-dri2-0:i386
+  libxcb-dri3-0:i386 libxcb-glx0:i386 libxcb-present0:i386 libxcb-sync1:i386
+  libxcb1:i386 libxdamage1:i386 libxdmcp6:i386 libxext6:i386 libxfixes3:i386
+  libxinerama1:i386 libxshmfence1:i386 libxxf86vm1:i386
+  linux-headers-4.15.0-39 linux-headers-4.15.0-39-generic
+  linux-headers-4.15.0-42 linux-headers-4.15.0-42-generic
+  linux-headers-4.15.0-43 linux-headers-4.15.0-43-generic
+  linux-image-4.15.0-39-generic linux-image-4.15.0-42-generic
+  linux-image-4.15.0-43-generic linux-modules-4.15.0-39-generic
+  linux-modules-4.15.0-42-generic linux-modules-4.15.0-43-generic
+  linux-modules-extra-4.15.0-39-generic linux-modules-extra-4.15.0-42-generic
+  linux-modules-extra-4.15.0-43-generic
+Use 'apt autoremove' to remove them.
+The following packages will be upgraded:
+  chromium-codecs-ffmpeg-extra cups cups-bsd cups-client cups-common
+  cups-core-drivers cups-daemon cups-ipp-utils cups-ppdc cups-server-common
+  distro-info-data file gir1.2-packagekitglib-1.0 gstreamer1.0-packagekit
+  libcups2 libcupscgi1 libcupsimage2 libcupsmime1 libcupsppdc1 libmagic-mgc
+  libmagic1 libpackagekit-glib2-18 libqt5core5a libqt5dbus5 libqt5gui5
+  libqt5network5 libqt5printsupport5 libqt5sql5 libqt5test5 libqt5widgets5
+  libqt5xml5 libsdl2-2.0-0 packagekit packagekit-tools python3-distro-info
+  qt5-gtk-platformtheme
+36 to upgrade, 0 to newly install, 0 to remove and 0 not to upgrade.
+Need to get 12.5 MB of archives.
+After this operation, 42.0 kB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://mirror.as24220.net/pub/ubuntu bionic-updates/universe amd64 chromium-codecs-ffmpeg-extra amd64 73.0.3683.75-0ubuntu0.18.04.1 [1,111 kB]
+Get:2 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-ipp-utils amd64 2.2.7-1ubuntu2.4 [209 kB]
+Get:3 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libcupscgi1 amd64 2.2.7-1ubuntu2.4 [27.4 kB]
+Get:4 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-core-drivers amd64 2.2.7-1ubuntu2.4 [27.8 kB]
+Get:5 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-server-common all 2.2.7-1ubuntu2.4 [415 kB]
+Get:6 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-common all 2.2.7-1ubuntu2.4 [206 kB]
+Get:7 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libcupsmime1 amd64 2.2.7-1ubuntu2.4 [13.1 kB]
+Get:8 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libcupsimage2 amd64 2.2.7-1ubuntu2.4 [18.6 kB]
+Get:9 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libcupsppdc1 amd64 2.2.7-1ubuntu2.4 [45.0 kB]
+Get:10 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-ppdc amd64 2.2.7-1ubuntu2.4 [26.8 kB]
+Get:11 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-bsd amd64 2.2.7-1ubuntu2.4 [38.5 kB]
+Get:12 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-client amd64 2.2.7-1ubuntu2.4 [139 kB]
+Get:13 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups-daemon amd64 2.2.7-1ubuntu2.4 [296 kB]
+Get:14 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libcups2 amd64 2.2.7-1ubuntu2.4 [211 kB]
+Get:15 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 cups amd64 2.2.7-1ubuntu2.4 [191 kB]
+Get:16 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 distro-info-data all 0.37ubuntu0.3 [4,528 B]
+Get:17 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libpackagekit-glib2-18 amd64 1.1.9-1ubuntu2.18.04.5 [102 kB]
+Get:18 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 gir1.2-packagekitglib-1.0 amd64 1.1.9-1ubuntu2.18.04.5 [21.6 kB]
+Get:19 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 file amd64 1:5.32-2ubuntu0.2 [22.1 kB]
+Get:20 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libmagic1 amd64 1:5.32-2ubuntu0.2 [68.5 kB]
+Get:21 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libmagic-mgc amd64 1:5.32-2ubuntu0.2 [184 kB]
+Get:22 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 python3-distro-info all 0.18ubuntu0.18.04.1 [9,296 B]
+Get:23 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 packagekit-tools amd64 1.1.9-1ubuntu2.18.04.5 [32.5 kB]
+Get:24 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 gstreamer1.0-packagekit amd64 1.1.9-1ubuntu2.18.04.5 [8,836 B]
+Get:25 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 packagekit amd64 1.1.9-1ubuntu2.18.04.5 [401 kB]
+Get:26 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5core5a amd64 5.9.5+dfsg-0ubuntu2 [2,037 kB]
+Get:27 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5dbus5 amd64 5.9.5+dfsg-0ubuntu2 [195 kB]
+Get:28 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 qt5-gtk-platformtheme amd64 5.9.5+dfsg-0ubuntu2 [117 kB]
+Get:29 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5network5 amd64 5.9.5+dfsg-0ubuntu2 [633 kB]
+Get:30 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5gui5 amd64 5.9.5+dfsg-0ubuntu2 [2,566 kB]
+Get:31 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5widgets5 amd64 5.9.5+dfsg-0ubuntu2 [2,205 kB]
+Get:32 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5printsupport5 amd64 5.9.5+dfsg-0ubuntu2 [178 kB]
+Get:33 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5sql5 amd64 5.9.5+dfsg-0ubuntu2 [115 kB]
+Get:34 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5test5 amd64 5.9.5+dfsg-0ubuntu2 [98.0 kB]
+Get:35 http://mirror.as24220.net/pub/ubuntu bionic-updates/main amd64 libqt5xml5 amd64 5.9.5+dfsg-0ubuntu2 [99.6 kB]
+Get:36 http://mirror.as24220.net/pub/ubuntu bionic-updates/universe amd64 libsdl2-2.0-0 amd64 2.0.8+dfsg1-1ubuntu1.18.04.3 [381 kB]
+Fetched 12.5 MB in 3s (4,011 kB/s)      
+Extracting templates from packages: 100%
+Preconfiguring packages ...
+(Reading database ... 445085 files and directories currently installed.)
+Preparing to unpack .../00-chromium-codecs-ffmpeg-extra_73.0.3683.75-0ubuntu0.18.04.1_amd64.deb ...
+Unpacking chromium-codecs-ffmpeg-extra (73.0.3683.75-0ubuntu0.18.04.1) over (72.0.3626.121-0ubuntu0.18.04.1) ...
+Preparing to unpack .../01-cups-ipp-utils_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups-ipp-utils (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../02-libcupscgi1_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking libcupscgi1:amd64 (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../03-cups-core-drivers_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups-core-drivers (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../04-cups-server-common_2.2.7-1ubuntu2.4_all.deb ...
+Unpacking cups-server-common (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../05-cups-common_2.2.7-1ubuntu2.4_all.deb ...
+Unpacking cups-common (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../06-libcupsmime1_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking libcupsmime1:amd64 (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../07-libcupsimage2_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking libcupsimage2:amd64 (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../08-libcupsppdc1_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking libcupsppdc1:amd64 (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../09-cups-ppdc_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups-ppdc (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../10-cups-bsd_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups-bsd (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../11-cups-client_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups-client (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../12-cups-daemon_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups-daemon (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../13-libcups2_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking libcups2:amd64 (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Setting up libcups2:amd64 (2.2.7-1ubuntu2.4) ...
+(Reading database ... 445085 files and directories currently installed.)
+Preparing to unpack .../cups_2.2.7-1ubuntu2.4_amd64.deb ...
+Unpacking cups (2.2.7-1ubuntu2.4) over (2.2.7-1ubuntu2.3) ...
+Preparing to unpack .../distro-info-data_0.37ubuntu0.3_all.deb ...
+Unpacking distro-info-data (0.37ubuntu0.3) over (0.37ubuntu0.2) ...
+Setting up distro-info-data (0.37ubuntu0.3) ...
+(Reading database ... 445085 files and directories currently installed.)
+Preparing to unpack .../libpackagekit-glib2-18_1.1.9-1ubuntu2.18.04.5_amd64.deb ...
+Unpacking libpackagekit-glib2-18:amd64 (1.1.9-1ubuntu2.18.04.5) over (1.1.9-1ubuntu2.18.04.4) ...
+Setting up libpackagekit-glib2-18:amd64 (1.1.9-1ubuntu2.18.04.5) ...
+(Reading database ... 445085 files and directories currently installed.)
+Preparing to unpack .../gir1.2-packagekitglib-1.0_1.1.9-1ubuntu2.18.04.5_amd64.deb ...
+Unpacking gir1.2-packagekitglib-1.0 (1.1.9-1ubuntu2.18.04.5) over (1.1.9-1ubuntu2.18.04.4) ...
+Setting up gir1.2-packagekitglib-1.0 (1.1.9-1ubuntu2.18.04.5) ...
+(Reading database ... 445085 files and directories currently installed.)
+Preparing to unpack .../00-file_1%3a5.32-2ubuntu0.2_amd64.deb ...
+Unpacking file (1:5.32-2ubuntu0.2) over (1:5.32-2ubuntu0.1) ...
+Preparing to unpack .../01-libmagic1_1%3a5.32-2ubuntu0.2_amd64.deb ...
+Unpacking libmagic1:amd64 (1:5.32-2ubuntu0.2) over (1:5.32-2ubuntu0.1) ...
+Preparing to unpack .../02-libmagic-mgc_1%3a5.32-2ubuntu0.2_amd64.deb ...
+Unpacking libmagic-mgc (1:5.32-2ubuntu0.2) over (1:5.32-2ubuntu0.1) ...
+Preparing to unpack .../03-python3-distro-info_0.18ubuntu0.18.04.1_all.deb ...
+Unpacking python3-distro-info (0.18ubuntu0.18.04.1) over (0.18) ...
+Preparing to unpack .../04-packagekit-tools_1.1.9-1ubuntu2.18.04.5_amd64.deb ...
+Unpacking packagekit-tools (1.1.9-1ubuntu2.18.04.5) over (1.1.9-1ubuntu2.18.04.4) ...
+Preparing to unpack .../05-gstreamer1.0-packagekit_1.1.9-1ubuntu2.18.04.5_amd64.deb ...
+Unpacking gstreamer1.0-packagekit (1.1.9-1ubuntu2.18.04.5) over (1.1.9-1ubuntu2.18.04.4) ...
+Preparing to unpack .../06-packagekit_1.1.9-1ubuntu2.18.04.5_amd64.deb ...
+Unpacking packagekit (1.1.9-1ubuntu2.18.04.5) over (1.1.9-1ubuntu2.18.04.4) ...
+Preparing to unpack .../07-libqt5core5a_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5core5a:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../08-libqt5dbus5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5dbus5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../09-qt5-gtk-platformtheme_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking qt5-gtk-platformtheme:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../10-libqt5network5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5network5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../11-libqt5gui5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5gui5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../12-libqt5widgets5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5widgets5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../13-libqt5printsupport5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5printsupport5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../14-libqt5sql5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5sql5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../15-libqt5test5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5test5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../16-libqt5xml5_5.9.5+dfsg-0ubuntu2_amd64.deb ...
+Unpacking libqt5xml5:amd64 (5.9.5+dfsg-0ubuntu2) over (5.9.5+dfsg-0ubuntu1) ...
+Preparing to unpack .../17-libsdl2-2.0-0_2.0.8+dfsg1-1ubuntu1.18.04.3_amd64.deb ...
+Unpacking libsdl2-2.0-0:amd64 (2.0.8+dfsg1-1ubuntu1.18.04.3) over (2.0.8+dfsg1-1ubuntu1.18.04.1) ...
+Setting up libqt5core5a:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Processing triggers for ufw (0.35-5) ...
+Setting up python3-distro-info (0.18ubuntu0.18.04.1) ...
+Setting up libqt5dbus5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Setting up cups-server-common (2.2.7-1ubuntu2.4) ...
+Setting up libqt5network5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Processing triggers for ureadahead (0.100.0-20) ...
+ureadahead will be reprofiled on next reboot
+Setting up cups-common (2.2.7-1ubuntu2.4) ...
+Setting up cups-ipp-utils (2.2.7-1ubuntu2.4) ...
+Setting up libqt5test5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Setting up libcupsmime1:amd64 (2.2.7-1ubuntu2.4) ...
+Setting up cups-daemon (2.2.7-1ubuntu2.4) ...
+Setting up cups-core-drivers (2.2.7-1ubuntu2.4) ...
+Setting up libmagic-mgc (1:5.32-2ubuntu0.2) ...
+Setting up libcupsppdc1:amd64 (2.2.7-1ubuntu2.4) ...
+Setting up libmagic1:amd64 (1:5.32-2ubuntu0.2) ...
+Setting up libcupsimage2:amd64 (2.2.7-1ubuntu2.4) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+Setting up libsdl2-2.0-0:amd64 (2.0.8+dfsg1-1ubuntu1.18.04.3) ...
+Setting up libqt5xml5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Setting up libqt5gui5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Setting up chromium-codecs-ffmpeg-extra (73.0.3683.75-0ubuntu0.18.04.1) ...
+Processing triggers for doc-base (0.10.8) ...
+Processing 1 changed doc-base file...
+Registering documents with scrollkeeper...
+Processing triggers for systemd (237-3ubuntu10.15) ...
+Setting up libqt5sql5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Processing triggers for man-db (2.8.3-2ubuntu0.1) ...
+Setting up qt5-gtk-platformtheme:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Processing triggers for dbus (1.12.2-1ubuntu1) ...
+Setting up cups-client (2.2.7-1ubuntu2.4) ...
+Setting up libcupscgi1:amd64 (2.2.7-1ubuntu2.4) ...
+Setting up packagekit (1.1.9-1ubuntu2.18.04.5) ...
+Setting up libqt5widgets5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Setting up gstreamer1.0-packagekit (1.1.9-1ubuntu2.18.04.5) ...
+Setting up cups-ppdc (2.2.7-1ubuntu2.4) ...
+Setting up cups (2.2.7-1ubuntu2.4) ...
+Updating PPD files for cups ...
+Setting up file (1:5.32-2ubuntu0.2) ...
+Setting up libqt5printsupport5:amd64 (5.9.5+dfsg-0ubuntu2) ...
+Setting up cups-bsd (2.2.7-1ubuntu2.4) ...
+Setting up packagekit-tools (1.1.9-1ubuntu2.18.04.5) ...
+Processing triggers for libc-bin (2.27-3ubuntu1) ...
+root@Belshazar:~# cd '/home/yanni/Desktop/bullhead-opm7.181205.001'
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# bash flash-all.sh
+fastboot too old
+root@Belshazar:~/Desktop/bullhead-opm7.181205.001# cd
+root@Belshazar:~# abd reboot bootloader
+
+Command 'abd' not found, did you mean:
+
+  command 'abx' from deb abx
+  command 'rbd' from deb ceph-common
+  command 'atd' from deb at
+  command 'sbd' from deb sbd
+  command 'adbd' from deb android-tools-adbd
+  command 'and' from deb and
+  command 'amd' from deb am-utils
+  command 'aid' from deb id-utils
+  command 'axd' from deb afnix
+  command 'ad' from deb netatalk
+  command 'adb' from deb adb
+  command 'abe' from deb abe
+  command 'bd' from deb bd
+  command 'dbd' from deb netatalk
+  command 'ab' from deb apache2-utils
+
+Try: apt install <deb name>
+
+root@Belshazar:~# adb reboot bootloader
+error: no devices/emulators found
+root@Belshazar:~# adb devices
+List of devices attached
+0202640c3ceab9ed	recovery
+
+root@Belshazar:~# adb reboot bootloader
+root@Belshazar:~# fastboot flashing unlock
+...
+FAILED (remote: Already unlocked)
+finished. total time: 0.008s
+root@Belshazar:~# cd '/home/yanni/Desktop/New Folder/bullhead-opr6.170623.013'
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot flash-allusage: fastboot [ <option> ] <command>
+
+commands:
+  update <filename>                        Reflash device from update.zip.
+  flashall                                 Flash boot, system, vendor, and --
+                                           if found -- recovery.
+  flash <partition> [ <filename> ]         Write a file to a flash partition.
+  flashing lock                            Locks the device. Prevents flashing.
+  flashing unlock                          Unlocks the device. Allows flashing
+                                           any partition except
+                                           bootloader-related partitions.
+  flashing lock_critical                   Prevents flashing bootloader-related
+                                           partitions.
+  flashing unlock_critical                 Enables flashing bootloader-related
+                                           partitions.
+  flashing get_unlock_ability              Queries bootloader to see if the
+                                           device is unlocked.
+  flashing get_unlock_bootloader_nonce     Queries the bootloader to get the
+                                           unlock nonce.
+  flashing unlock_bootloader <request>     Issue unlock bootloader using request.
+  flashing lock_bootloader                 Locks the bootloader to prevent
+                                           bootloader version rollback.
+  erase <partition>                        Erase a flash partition.
+  format[:[<fs type>][:[<size>]] <partition>
+                                           Format a flash partition. Can
+                                           override the fs type and/or size
+                                           the bootloader reports.
+  getvar <variable>                        Display a bootloader variable.
+  set_active <suffix>                      Sets the active slot. If slots are
+                                           not supported, this does nothing.
+  boot <kernel> [ <ramdisk> [ <second> ] ] Download and boot kernel.
+  flash:raw boot <kernel> [ <ramdisk> [ <second> ] ]
+                                           Create bootimage and flash it.
+  devices [-l]                             List all connected devices [with
+                                           device paths].
+  continue                                 Continue with autoboot.
+  reboot [bootloader]                      Reboot device [into bootloader].
+  reboot-bootloader                        Reboot device into bootloader.
+  help                                     Show this help message.
+
+options:
+  -w                                       Erase userdata and cache (and format
+                                           if supported by partition type).
+  -u                                       Do not erase partition before
+                                           formatting.
+  -s <specific device>                     Specify a device. For USB, provide either
+                                           a serial number or path to device port.
+                                           For ethernet, provide an address in the                                           form <protocol>:<hostname>[:port] where                                           <protocol> is either tcp or udp.
+  -p <product>                             Specify product name.
+  -c <cmdline>                             Override kernel commandline.
+  -i <vendor id>                           Specify a custom USB vendor id.
+  -b, --base <base_addr>                   Specify a custom kernel base
+                                           address (default: 0x10000000).
+  --kernel-offset                          Specify a custom kernel offset.
+                                           (default: 0x00008000)
+  --ramdisk-offset                         Specify a custom ramdisk offset.
+                                           (default: 0x01000000)
+  --tags-offset                            Specify a custom tags offset.
+                                           (default: 0x00000100)
+  -n, --page-size <page size>              Specify the nand page size
+                                           (default: 2048).
+  -S <size>[K|M|G]                         Automatically sparse files greater
+                                           than 'size'. 0 to disable.
+  --slot <suffix>                          Specify slot suffix to be used if the
+                                           device supports slots. This will be
+                                           added to all partition names that use
+                                           slots. 'all' can be given to refer
+                                           to all slots. 'other' can be given to
+                                           refer to a non-current slot. If this
+                                           flag is not used, slotted partitions
+                                           will default to the current active slot.
+  -a, --set-active[=<suffix>]              Sets the active slot. If no suffix is
+                                           provided, this will default to the value
+                                           given by --slot. If slots are not
+                                           supported, this does nothing. This will
+                                           run after all non-reboot commands.
+  --wipe-and-use-fbe                       On devices which support it,
+                                           erase userdata and cache, and
+                                           enable file-based encryption
+  --unbuffered                             Do not buffer input or output.
+  --version                                Display version.
+  -h, --help                               show this message.
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot flash-all.sh
+usage: fastboot [ <option> ] <command>
+
+commands:
+  update <filename>                        Reflash device from update.zip.
+  flashall                                 Flash boot, system, vendor, and --
+                                           if found -- recovery.
+  flash <partition> [ <filename> ]         Write a file to a flash partition.
+  flashing lock                            Locks the device. Prevents flashing.
+  flashing unlock                          Unlocks the device. Allows flashing
+                                           any partition except
+                                           bootloader-related partitions.
+  flashing lock_critical                   Prevents flashing bootloader-related
+                                           partitions.
+  flashing unlock_critical                 Enables flashing bootloader-related
+                                           partitions.
+  flashing get_unlock_ability              Queries bootloader to see if the
+                                           device is unlocked.
+  flashing get_unlock_bootloader_nonce     Queries the bootloader to get the
+                                           unlock nonce.
+  flashing unlock_bootloader <request>     Issue unlock bootloader using request.
+  flashing lock_bootloader                 Locks the bootloader to prevent
+                                           bootloader version rollback.
+  erase <partition>                        Erase a flash partition.
+  format[:[<fs type>][:[<size>]] <partition>
+                                           Format a flash partition. Can
+                                           override the fs type and/or size
+                                           the bootloader reports.
+  getvar <variable>                        Display a bootloader variable.
+  set_active <suffix>                      Sets the active slot. If slots are
+                                           not supported, this does nothing.
+  boot <kernel> [ <ramdisk> [ <second> ] ] Download and boot kernel.
+  flash:raw boot <kernel> [ <ramdisk> [ <second> ] ]
+                                           Create bootimage and flash it.
+  devices [-l]                             List all connected devices [with
+                                           device paths].
+  continue                                 Continue with autoboot.
+  reboot [bootloader]                      Reboot device [into bootloader].
+  reboot-bootloader                        Reboot device into bootloader.
+  help                                     Show this help message.
+
+options:
+  -w                                       Erase userdata and cache (and format
+                                           if supported by partition type).
+  -u                                       Do not erase partition before
+                                           formatting.
+  -s <specific device>                     Specify a device. For USB, provide either
+                                           a serial number or path to device port.
+                                           For ethernet, provide an address in the                                           form <protocol>:<hostname>[:port] where                                           <protocol> is either tcp or udp.
+  -p <product>                             Specify product name.
+  -c <cmdline>                             Override kernel commandline.
+  -i <vendor id>                           Specify a custom USB vendor id.
+  -b, --base <base_addr>                   Specify a custom kernel base
+                                           address (default: 0x10000000).
+  --kernel-offset                          Specify a custom kernel offset.
+                                           (default: 0x00008000)
+  --ramdisk-offset                         Specify a custom ramdisk offset.
+                                           (default: 0x01000000)
+  --tags-offset                            Specify a custom tags offset.
+                                           (default: 0x00000100)
+  -n, --page-size <page size>              Specify the nand page size
+                                           (default: 2048).
+  -S <size>[K|M|G]                         Automatically sparse files greater
+                                           than 'size'. 0 to disable.
+  --slot <suffix>                          Specify slot suffix to be used if the
+                                           device supports slots. This will be
+                                           added to all partition names that use
+                                           slots. 'all' can be given to refer
+                                           to all slots. 'other' can be given to
+                                           refer to a non-current slot. If this
+                                           flag is not used, slotted partitions
+                                           will default to the current active slot.
+  -a, --set-active[=<suffix>]              Sets the active slot. If no suffix is
+                                           provided, this will default to the value
+                                           given by --slot. If slots are not
+                                           supported, this does nothing. This will
+                                           run after all non-reboot commands.
+  --wipe-and-use-fbe                       On devices which support it,
+                                           erase userdata and cache, and
+                                           enable file-based encryption
+  --unbuffered                             Do not buffer input or output.
+  --version                                Display version.
+  -h, --help                               show this message.
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot flash bootloader bootloader-bullhead-bhz21c.img
+target reported max download size of 536870912 bytes
+sending 'bootloader' (4620 KB)...
+OKAY [  0.225s]
+writing 'bootloader'...
+OKAY [  0.152s]
+finished. total time: 0.378s
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot reboot-bootloader
+rebooting into bootloader...
+OKAY [  0.001s]
+finished. total time: 0.051s
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot flash radio radio-bullhead-m8994f-2.6.39.3.03.img
+target reported max download size of 536870912 bytes
+sending 'radio' (56630 KB)...
+OKAY [  1.702s]
+writing 'radio'...
+OKAY [  0.550s]
+finished. total time: 2.253s
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot reboot-bootloader
+rebooting into bootloader...
+OKAY [  0.006s]
+finished. total time: 0.056s
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# fastboot -w update image-bullhead-opr6.170623.013.zip
+target reported max download size of 536870912 bytes
+archive does not contain 'boot.sig'
+archive does not contain 'recovery.sig'
+archive does not contain 'system.sig'
+archive does not contain 'vendor.sig'
+wiping userdata...
+Creating filesystem with parameters:
+    Size: 27283927040
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8176
+    Inode size: 256
+    Journal blocks: 32768
+    Label: 
+    Blocks: 6661115
+    Block groups: 204
+    Reserved block group size: 1024
+Created filesystem with 11/1667904 inodes and 148720/6661115 blocks
+wiping cache...
+Creating filesystem with parameters:
+    Size: 100663296
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 6144
+    Inode size: 256
+    Journal blocks: 1024
+    Label: 
+    Blocks: 24576
+    Block groups: 1
+    Reserved block group size: 7
+Created filesystem with 11/6144 inodes and 1422/24576 blocks
+--------------------------------------------
+Bootloader Version...: BHZ21c
+Baseband Version.....: M8994F-2.6.39.3.03
+Serial Number........: 0202640c3ceab9ed
+--------------------------------------------
+checking product...
+OKAY [  0.020s]
+checking version-bootloader...
+OKAY [  0.019s]
+checking version-baseband...
+OKAY [  0.020s]
+sending 'boot' (12509 KB)...
+OKAY [  0.477s]
+writing 'boot'...
+OKAY [  0.137s]
+sending 'recovery' (16533 KB)...
+OKAY [  0.571s]
+writing 'recovery'...
+OKAY [  0.183s]
+erasing 'system'...
+OKAY [  0.709s]
+sending sparse 'system' 1/4 (522797 KB)...
+OKAY [ 16.459s]
+writing 'system' 1/4...
+OKAY [  6.219s]
+sending sparse 'system' 2/4 (524261 KB)...
+OKAY [ 16.766s]
+writing 'system' 2/4...
+OKAY [  5.839s]
+sending sparse 'system' 3/4 (521503 KB)...
+OKAY [ 16.200s]
+writing 'system' 3/4...
+OKAY [  6.841s]
+sending sparse 'system' 4/4 (378361 KB)...
+OKAY [ 11.767s]
+writing 'system' 4/4...
+OKAY [  4.386s]
+erasing 'vendor'...
+OKAY [  0.101s]
+sending 'vendor' (184799 KB)...
+OKAY [  5.763s]
+writing 'vendor'...
+OKAY [  2.676s]
+erasing 'userdata'...
+OKAY [  0.659s]
+sending 'userdata' (138993 KB)...
+OKAY [  4.226s]
+writing 'userdata'...
+OKAY [  1.493s]
+erasing 'cache'...
+OKAY [  0.079s]
+sending 'cache' (5688 KB)...
+OKAY [  0.262s]
+writing 'cache'...
+OKAY [  0.083s]
+rebooting...
+
+finished. total time: 102.099s
+root@Belshazar:~/Desktop/New Folder/bullhead-opr6.170623.013# 
