@@ -1,0 +1,234 @@
+yanni@Belshazar:~$ fastboot devices
+no permissions (verify udev rules); see [http://developer.android.com/tools/device.html]	fastboot
+yanni@Belshazar:~$ adb devices
+List of devices attached
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+
+yanni@Belshazar:~$ fastboot devices
+no permissions (verify udev rules); see [http://developer.android.com/tools/device.html]	fastboot
+yanni@Belshazar:~$ adb devices
+List of devices attached
+
+yanni@Belshazar:~$ sudo -s
+[sudo] password for yanni:          
+root@Belshazar:~# fastboot devices
+0202640c3ceab9ed	fastboot
+root@Belshazar:~# fastboot format cache
+Creating filesystem with parameters:
+    Size: 100663296
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 6144
+    Inode size: 256
+    Journal blocks: 1024
+    Label: 
+    Blocks: 24576
+    Block groups: 1
+    Reserved block group size: 7
+Created filesystem with 11/6144 inodes and 1422/24576 blocks
+target reported max download size of 536870912 bytes
+erasing 'cache'...
+OKAY [  0.064s]
+sending 'cache' (5688 KB)...
+OKAY [  0.232s]
+writing 'cache'...
+OKAY [  0.069s]
+finished. total time: 0.365s
+root@Belshazar:~# fastboot format userdata
+Creating filesystem with parameters:
+    Size: 27283927040
+    Block size: 4096
+    Blocks per group: 32768
+    Inodes per group: 8176
+    Inode size: 256
+    Journal blocks: 32768
+    Label: 
+    Blocks: 6661115
+    Block groups: 204
+    Reserved block group size: 1024
+Created filesystem with 11/1667904 inodes and 148720/6661115 blocks
+target reported max download size of 536870912 bytes
+erasing 'userdata'...
+OKAY [  1.391s]
+sending 'userdata' (138993 KB)...
+OKAY [  3.667s]
+writing 'userdata'...
+OKAY [  1.572s]
+finished. total time: 6.630s
+root@Belshazar:~# cd pm-flashtool
+root@Belshazar:~/pm-flashtool# ./pm-flashtool -p edge
+bash: ./pm-flashtool: No such file or directory
+root@Belshazar:~/pm-flashtool# ./pm-flash -p edge
++ CACHEDIR=cache
++ echo 'Waiting for device to be in the fastboot mode'
+Waiting for device to be in the fastboot mode
++ fastboot getvar product
+product: bullhead
+finished. total time: 0.006s
+++ awk '-F: ' '{print $2}'
+++ head -1
+++ fastboot getvar product
++ DEVICE_NAME=bullhead
++ confirm 'Connected device is bullhead, is that correct? [y/N]'
++ read -r -p 'Connected device is bullhead, is that correct? [y/N] ' response
+Connected device is bullhead, is that correct? [y/N] y
++ case $response in
++ true
++ PLATFORM=neon
++ echo 'Continuing ...'
+Continuing ...
++ getopts cp: opt
++ case $opt in
++ PLATFORM=edge
++ getopts cp: opt
++ '[' -z '' ']'
++ download bullhead edge
++ '[' 2 -eq 0 ']'
++ mkdir -p cache/
++ pushd cache/
+~/pm-flashtool/cache ~/pm-flashtool
++ echo 'Downloading latest rootfs ... '
+Downloading latest rootfs ... 
++ '[' edge == neon ']'
++ '[' edge == arch ']'
++ '[' edge == edge ']'
+++ curl https://images.plasma-mobile.org/edge_rootfs_stamp
++ ROOTFS_VERSION=20190306-144714
++ wget -c https://images.plasma-mobile.org/edge-rootfs/pm-rootfs-20190306-144714.tar.gz -P rootfs
+--2019-03-19 01:27:13--  https://images.plasma-mobile.org/edge-rootfs/pm-rootfs-20190306-144714.tar.gz
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ ln -sf rootfs/pm-rootfs-20190306-144714.tar.gz pm-rootfs-latest.tar.gz
++ echo '[done]'
+[done]
++ echo 'Downloading the latest boot, recovery, and system images  ... '
+Downloading the latest boot, recovery, and system images  ... 
+++ curl https://images.plasma-mobile.org/halium/bullhead/halium_stamp
++ HALIUM_VERSION=20180209-134208
++ wget -c https://images.plasma-mobile.org/halium/bullhead/recovery.img -P bullhead
+--2019-03-19 01:27:16--  https://images.plasma-mobile.org/halium/bullhead/recovery.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ wget -c https://images.plasma-mobile.org/halium/bullhead/20180209-134208/system.img -P bullhead/20180209-134208
+--2019-03-19 01:27:17--  https://images.plasma-mobile.org/halium/bullhead/20180209-134208/system.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ wget -c https://images.plasma-mobile.org/halium/bullhead/20180209-134208/boot.img -P bullhead/20180209-134208
+--2019-03-19 01:27:18--  https://images.plasma-mobile.org/halium/bullhead/20180209-134208/boot.img
+Resolving images.plasma-mobile.org (images.plasma-mobile.org)... 207.154.251.179
+Connecting to images.plasma-mobile.org (images.plasma-mobile.org)|207.154.251.179|:443... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+
++ rm -f bullhead/latest
++ ln -sf 20180209-134208 bullhead/latest
++ echo '[done]'
+[done]
++ popd
+~/pm-flashtool
++ flash-phone bullhead
++ '[' 1 -eq 0 ']'
++ echo -n 'Flashing recovery image ... '
+Flashing recovery image ... + fastboot flash recovery cache/bullhead/recovery.img
++ echo -n '[done]'
+[done]+ fastboot boot cache/bullhead/recovery.img
+downloading 'boot.img'...
+OKAY [  0.503s]
+booting...
+OKAY [  0.546s]
+finished. total time: 1.049s
++ wait_for_device
+++ adb shell echo 1
++ test -z ''
++ echo -n .
+.+ sleep 3
+++ adb shell echo 1
++ test -z ''
++ echo -n .
+.+ sleep 3
+++ adb shell echo 1
++ test -z $'1\r'
++ echo
+
+++ readlink -f cache/pm-rootfs-latest.tar.gz
++ ./rootstock-touch-install /home/yanni/pm-flashtool/cache/rootfs/pm-rootfs-20190306-144714.tar.gz cache/bullhead/latest/system.img cache/bullhead/latest/boot.img
+mount: mounting /dev/block/mmcblk0p40 on /cache failed: Device or resource busy
+mount: mounting /dev/block/mmcblk0p45 on /data failed: Device or resource busy
+transfering rootfs tarball ... [done]
+preparing system-image on device ... [done]
+unpacking rootfs tarball to system-image ... [done]
+adding android system image to installation ... [done]
+Setting up default password for phablet user to 1234 ... [done]
+Cloning into 'fetch-demo-data'...
+remote: Counting objects: 12, done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 12 (delta 0), reused 3 (delta 0)
+Unpacking objects: 100% (12/12), done.
+--2019-03-19 01:30:20--  http://acbf.info/download?id=0016
+Resolving acbf.info (acbf.info)... 5.10.124.141
+Connecting to acbf.info (acbf.info)|5.10.124.141|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [application/zip]
+Saving to: 'OUTPUT/Documents/Pepper___Carrot___Vol__1.cbz’
+
+OUTPUT/Documents/Pe     [   <=>              ]  21.77M  3.01MB/s    in 10s     
+
+2019-03-19 01:30:33 (2.10 MB/s) - 'OUTPUT/Documents/Pepper___Carrot___Vol__1.cbz’ saved [22831062]
+
+--2019-03-19 01:30:33--  https://www.gnu.org/licenses/quick-guide-gplv3.pdf
+Resolving www.gnu.org (www.gnu.org)... 209.51.188.148, 2001:470:142:3::a
+Connecting to www.gnu.org (www.gnu.org)|209.51.188.148|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 104908 (102K) [application/pdf]
+Saving to: 'OUTPUT/Documents/quick-guide-gplv3.pdf’
+
+quick-guide-gplv3.p 100%[===================>] 102.45K   141KB/s    in 0.7s    
+
+2019-03-19 01:30:35 (141 KB/s) - 'OUTPUT/Documents/quick-guide-gplv3.pdf’ saved [104908/104908]
+
+~/pm-flashtool/OUTPUT ~/pm-flashtool
+./
+./Documents/
+./Documents/quick-guide-gplv3.pdf
+./Documents/Pepper___Carrot___Vol__1.cbz
+~/pm-flashtool
+./
+./Documents/
+./Documents/quick-guide-gplv3.pdf
+./Documents/Pepper___Carrot___Vol__1.cbz
+cleaning up on device ... [done]
+Increasing the rootfs size to 4G ... e2fsck 1.42.9 (28-Dec-2013)
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+
+/data/rootfs.img: ***** FILE SYSTEM WAS MODIFIED *****
+/data/rootfs.img: 78878/128000 files (4.1% non-contiguous), 372863/512000 blocks
+resize2fs 1.42.9 (28-Dec-2013)
+Resizing the filesystem on /data/rootfs.img to 1024000 (4k) blocks.
+The filesystem on /data/rootfs.img is now 1024000 blocks long.
+
+[done]
+[100%] /data/time/timekeep
+[done]
+rebooting into bootloader mode and flashing boot.img ... [done]
+
+root@Belshazar:~/pm-flashtool# cd
+root@Belshazar:~# cd
+root@Belshazar:~# 
