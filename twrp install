@@ -1,0 +1,77 @@
+yanni@Belshazar:~$ abd reboot bootloader
+
+Command 'abd' not found, did you mean:
+
+  command 'abx' from deb abx
+  command 'rbd' from deb ceph-common
+  command 'axd' from deb afnix
+  command 'and' from deb and
+  command 'aid' from deb id-utils
+  command 'amd' from deb am-utils
+  command 'bd' from deb bd
+  command 'adb' from deb adb
+  command 'ad' from deb netatalk
+  command 'sbd' from deb sbd
+  command 'abe' from deb abe
+  command 'dbd' from deb netatalk
+  command 'adbd' from deb android-tools-adbd
+  command 'atd' from deb at
+  command 'ab' from deb apache2-utils
+
+Try: sudo apt install <deb name>
+
+yanni@Belshazar:~$ adb reboot bootloader
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+error: insufficient permissions for device: verify udev rules.
+See [http://developer.android.com/tools/device.html] for more information.
+yanni@Belshazar:~$ ls
+'Calibre Library'   installed-software   snap
+ Desktop            Mail                 Steam
+ Documents          Music                Templates
+ Downloads          Pictures             twrp-3.2.3-0-bullhead.img.html
+'Dwarf Fortress'    pm-flashtool         Videos
+ Enpass             Public
+yanni@Belshazar:~$ sudo -s
+[sudo] password for yanni:          
+root@Belshazar:~# adb reboot bootloader
+error: insufficient permissions for device: verify udev rules.
+See [http://developer.android.com/tools/device.html] for more information.
+root@Belshazar:~# adb devices
+List of devices attached
+0202640c3ceab9ed	no permissions (verify udev rules); see [http://developer.android.com/tools/device.html]
+
+root@Belshazar:~# fastboot devices
+root@Belshazar:~# start-server
+
+Command 'start-server' not found, did you mean:
+
+  command 'start_server' from deb libserver-starter-perl
+
+Try: apt install <deb name>
+
+root@Belshazar:~# adb start-server
+root@Belshazar:~# adb kill-server
+root@Belshazar:~# adb start-server
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+root@Belshazar:~# adb reboot bootloader
+root@Belshazar:~# fastboot flash recovery '/home/yanni/twrp-3.2.3-0-bullhead.img.html'
+target reported max download size of 536870912 bytes
+sending 'recovery' (6 KB)...
+OKAY [  0.095s]
+writing 'recovery'...
+FAILED (remote: image is not a boot image)
+finished. total time: 0.110s
+root@Belshazar:~# fastboot flash recovery '/home/yanni/twrp-3.2.3-0-bullhead.img'
+target reported max download size of 536870912 bytes
+sending 'recovery' (16289 KB)...
+OKAY [  0.560s]
+writing 'recovery'...
+OKAY [  0.171s]
+finished. total time: 0.731s
+root@Belshazar:~# fastboot reboot
+rebooting...
+
+finished. total time: 0.053s
+root@Belshazar:~# 
