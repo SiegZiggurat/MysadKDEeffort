@@ -1,0 +1,90 @@
+yanni@Belshazar:~$ adb push -p '/home/yanni/maru-v0.6.6-update-hammerhead-90e81fc8.zip' /sdcard/
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+adb: error: connect failed: no devices/emulators found
+yanni@Belshazar:~$ adb devices
+List of devices attached
+
+yanni@Belshazar:~$ sudo -s
+[sudo] password for yanni:          
+root@Belshazar:~# abd devices
+
+Command 'abd' not found, did you mean:
+
+  command 'adb' from deb adb
+  command 'aid' from deb id-utils
+  command 'rbd' from deb ceph-common
+  command 'atd' from deb at
+  command 'abx' from deb abx
+  command 'axd' from deb afnix
+  command 'sbd' from deb sbd
+  command 'bd' from deb bd
+  command 'ad' from deb netatalk
+  command 'dbd' from deb netatalk
+  command 'amd' from deb am-utils
+  command 'and' from deb and
+  command 'ab' from deb apache2-utils
+  command 'adbd' from deb android-tools-adbd
+  command 'abe' from deb abe
+
+Try: apt install <deb name>
+
+root@Belshazar:~# adb devices
+List of devices attached
+
+root@Belshazar:~# adb start-server
+root@Belshazar:~# adb kill-server
+root@Belshazar:~# adb start-server
+* daemon not running. starting it now on port 5037 *
+* daemon started successfully *
+root@Belshazar:~# adb devices
+List of devices attached
+
+root@Belshazar:~# cd
+root@Belshazar:~# fastboot flash recovery '/home/yanni/twrp-3.2.3-0-bullhead.img'
+target reported max download size of 536870912 bytes
+sending 'recovery' (16289 KB)...
+OKAY [  0.562s]
+writing 'recovery'...
+OKAY [  0.166s]
+finished. total time: 0.729s
+root@Belshazar:~# adb push -p '/home/yanni/maru-v0.6.6-update-hammerhead-90e81fc8.zip' /sdcard/
+adb: error: connect failed: no devices/emulators found
+root@Belshazar:~# adb devices
+List of devices attached
+
+root@Belshazar:~# adb devices
+List of devices attached
+0202640c3ceab9ed	device
+
+root@Belshazar:~# adb push -p '/home/yanni/maru-v0.6.6-update-hammerhead-90e81fc8.zip' /sdcard/
+[100%] /sdcard/maru-v0.6.6-update-hammerhead-90e81fc8.zip
+root@Belshazar:~# adb reboot recovery
+root@Belshazar:~# adb reboot bootloader
+error: no devices/emulators found
+root@Belshazar:~# adb devices
+List of devices attached
+
+root@Belshazar:~# fastboot flash recovery '/home/yanni/twrp-3.2.3-0-bullhead.img'
+target reported max download size of 536870912 bytes
+sending 'recovery' (16289 KB)...
+OKAY [  0.559s]
+writing 'recovery'...
+OKAY [  0.168s]
+finished. total time: 0.727s
+root@Belshazar:~# fastboot reboot
+rebooting...
+
+finished. total time: 0.052s
+root@Belshazar:~# fastboot reboot
+rebooting...
+
+finished. total time: 0.059s
+root@Belshazar:~# fastboot flash recovery '/home/yanni/twrp-3.2.3-0-bullhead.img'
+target reported max download size of 536870912 bytes
+sending 'recovery' (16289 KB)...
+OKAY [  0.546s]
+writing 'recovery'...
+OKAY [  0.189s]
+finished. total time: 0.735s
+root@Belshazar:~# 
